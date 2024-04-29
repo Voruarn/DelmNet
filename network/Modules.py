@@ -142,18 +142,11 @@ class LMMPost(nn.Module):
     def __init__(self, in_channel):
         super(LMMPost, self).__init__()
         self.cbam=CBAM(in_channel)
-        self.in_ch=in_channel
-        self.conv1 = nn.Conv2d(in_channel, in_channel, kernel_size=3, stride=1, padding=1)
-        self.bn1 = nn.BatchNorm2d(in_channel)
-        self.conv2 = nn.Conv2d(in_channel, in_channel*2, kernel_size=3, stride=1, padding=1)
 
     def forward(self, x):
         x=self.cbam(x)
-        out1 = F.relu(self.bn1(self.conv1(x)), inplace=True) #256
-        out2 = self.conv2(out1)
-        w, b = out2[:, :self.in_ch, :, :], out2[:, self.in_ch:, :, :]
 
-        return F.relu(w * out1 + b, inplace=True)
+        return x
 
 
 class LMM(nn.Module):
